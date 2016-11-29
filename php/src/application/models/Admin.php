@@ -20,7 +20,6 @@ class Admin extends CI_model
 		$this->db->where($array);
 		$query = $this->db->get('adminauth')->row_array();
 		return $query;
-		
 	}
 
 	public function getadminlist()

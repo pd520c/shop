@@ -4,7 +4,7 @@ class Login extends CI_Controller{
 	function Login()
 	{
 		parent::__construct();
-		//$this->load->model('common');
+		$this->load->model('admin');
 	    $this->load->helper('url');
 	    $this->load->library('session');
 	}
@@ -25,18 +25,35 @@ class Login extends CI_Controller{
 	public function logout()
 	{
 		$this->session->unset_userdata('username');
-		redirect('/login');
+		redirect('admin/login');
 	}
 
 
 	public function index()
 	{
-		echo "jass";
+		$this->load->view('admin/Login');
 	}
 
 	public function auth()
 	{
-		# code...
+		$username = $this->input->post('username');
+		$password = md5($this->input->post('password'));
+		$query= $this->admin->isadmin($username,$password);
+		//print_r($query);
+			if ($query) 
+			{
+					$newdata = array(
+                   				'username'  => $query['username'],
+                   				'logged_in' => TRUE
+               				);
+        			$this->session->set_userdata($newdata);
+        			redirect('/admin/admin');
+			} 
+			else 
+			{
+				echo 'password error';
+			}
+		
 	}
 
 	public function adduser()
@@ -44,7 +61,7 @@ class Login extends CI_Controller{
 		$username = $this->input->post('username');
 		$password = md5($this->input->post('password'));
 		$data = array( 'username' => $username, 'password' => $password );
-		$this->common->add('user',$data);
-		redirect('/login');
+		$this->admin->addadmin($data);
+		redirect('admin/login');
 	}
 }
