@@ -31,7 +31,16 @@ class Login extends CI_Controller{
 
 	public function index()
 	{
-		$this->load->view('admin/Login');
+		if ($this->islogin()) 
+		{
+			redirect('/admin/admin');
+		} 
+		else 
+		{
+			$this->load->view('admin/Login');
+		}
+		
+		
 	}
 
 	public function auth()
